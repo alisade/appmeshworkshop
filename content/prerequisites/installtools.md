@@ -21,8 +21,7 @@ cat > ~/environment/scripts/install-tools <<-"EOF"
 
 sudo yum install -y jq gettext
 
-sudo curl --silent --location "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/linux_64bit/session-manager-plugin.rpm" -o "session-manager-plugin.rpm"
-sudo yum install -y session-manager-plugin.rpm
+sudo yum install -y "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/linux_64bit/session-manager-plugin.rpm"
 
 sudo wget -O /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/2.4.0/yq_linux_amd64
 sudo chmod +x /usr/local/bin/yq
