@@ -89,10 +89,9 @@ HOSTED_ZONE_ID=$(aws route53 list-hosted-zones-by-name \
 --max-items 1 | \
 jq -r ' .HostedZones | first | .Id' \
 | cut -d '/' -f3);
-RECORD_SET=$(aws route53 list-resource-record-sets --hosted-zone-id=$HOSTED_ZONE_ID | \
-jq -r '.ResourceRecordSets[] | select (.Name == "crystal.appmeshworkshop.hosted.local.") | '.AliasTarget.HostedZoneId'');
 NODEJS_LB_URL=$(kubectl get service nodejs-app-service -n appmesh-workshop-ns -o json | jq -r '.status.loadBalancer.ingress[].hostname')
-
+LB_NAME=$(echo $NODEJS_LB_URL | awk -F- '{print $2}')
+RECORD_SET=$(aws elb describe-load-balancers --load-balancer-names $LB_NAME | jq -r .LoadBalancerDescriptions[].CanonicalHostedZoneNameID)
 # Create Route53 batch file
 cat <<-EOF > /tmp/add_nodejs_recordset.json
 {
